@@ -1,0 +1,67 @@
+<FrameLayout 
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    
+    <LinearLayout
+    android:id="@+id/linear"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="20dp"
+    android:visibility="visible" >
+
+	    <EditText
+	        android:id="@+id/inputId"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:maxLines="1"
+	        android:scrollHorizontally="true"
+	        android:hint="输入会员号"
+	        android:inputType="number" />
+	    <LinearLayout 
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal">
+	    <Button 
+	        android:id="@+id/encode2DBtn"
+	        android:layout_gravity="center_horizontal"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:padding="10dp"
+	        android:text="生成二维码"
+	        android:textSize="16dp"
+	        android:onClick="geneqr"/>
+	          <Button 
+	        android:id="@+id/encodeBarBtn"
+	        android:layout_gravity="center_horizontal"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" 
+	        android:layout_weight="1"
+	        android:padding="10dp"
+	        android:text="生成条形码"
+	        android:textSize="16dp"
+	        android:onClick="geneqr"/>  
+	    </LinearLayout>
+	    <TextView 
+	        android:id="@+id/showcontents"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:gravity="center_horizontal"/>
+	    <ImageView 
+	        android:id="@+id/image_view"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:background="@android:color/white"
+	        android:onClick="zoomup"/>
+	</LinearLayout>
+    <ImageView 
+        android:id="@+id/scaleimg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:visibility="gone"
+        android:onClick="zoomdown"/>
+</FrameLayout>

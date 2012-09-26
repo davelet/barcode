@@ -1,34 +1,31 @@
-# view AndroidManifest.xml #generated:50
--keep class com.google.zxing.client.android.CaptureActivity { <init>(...); }
+# view AndroidManifest.xml #generated:46
+-keep class com.portaura.zxing.CaptureActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:164
--keep class com.google.zxing.client.android.HelpActivity { <init>(...); }
+# view res/layout/capture.xml #generated:11
+-keep class com.portaura.zxing.ViewfinderView { <init>(...); }
 
-# view AndroidManifest.xml #generated:95
--keep class com.google.zxing.client.android.PreferencesActivity { <init>(...); }
+# view AndroidManifest.xml #generated:65
+-keep class com.portaura.zxing.encode.QRPic { <init>(...); }
 
-# view ldpi\res/layout-ldpi/capture.xml #generated:25
-# view res/layout/capture.xml #generated:25
--keep class com.google.zxing.client.android.ViewfinderView { <init>(...); }
+# onClick res/layout/activity_qrpic.xml #generated:27
+# onClick res/layout/activity_qrpic.xml #generated:37
+-keepclassmembers class * { *** geneqr(...); }
 
-# view AndroidManifest.xml #generated:119
--keep class com.google.zxing.client.android.book.SearchBookContentsActivity { <init>(...); }
+# onClick res/layout/capture.xml #generated:87
+-keepclassmembers class * { *** gotogene(...); }
 
-# view res/layout/search_book_contents_list_item.xml #generated:17
--keep class com.google.zxing.client.android.book.SearchBookContentsListItem { <init>(...); }
+# onClick res/layout/capture.xml #generated:79
+-keepclassmembers class * { *** rep(...); }
 
-# view AndroidManifest.xml #generated:99
--keep class com.google.zxing.client.android.encode.EncodeActivity { <init>(...); }
+# onClick res/layout/capture.xml #generated:72
+-keepclassmembers class * { *** sendToServer(...); }
 
-# view AndroidManifest.xml #generated:139
--keep class com.google.zxing.client.android.history.HistoryActivity { <init>(...); }
+# onClick res/layout/capture.xml #generated:64
+-keepclassmembers class * { *** shareByTb(...); }
 
-# view AndroidManifest.xml #generated:155
--keep class com.google.zxing.client.android.share.AppPickerActivity { <init>(...); }
+# onClick res/layout/activity_qrpic.xml #generated:60
+-keepclassmembers class * { *** zoomdown(...); }
 
-# view AndroidManifest.xml #generated:147
--keep class com.google.zxing.client.android.share.BookmarkPickerActivity { <init>(...); }
-
-# view AndroidManifest.xml #generated:129
--keep class com.google.zxing.client.android.share.ShareActivity { <init>(...); }
+# onClick res/layout/activity_qrpic.xml #generated:53
+-keepclassmembers class * { *** zoomup(...); }
 
