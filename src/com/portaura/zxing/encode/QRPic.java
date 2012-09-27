@@ -42,7 +42,6 @@ public class QRPic extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_qrpic);
-
 	}
 
 	public void geneqr(View v) {

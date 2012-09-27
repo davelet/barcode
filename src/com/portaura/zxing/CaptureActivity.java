@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2008 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.portaura.zxing;
 
 import java.io.IOException;
@@ -30,7 +14,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.os.PowerManager;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -51,10 +34,10 @@ public final class CaptureActivity extends Activity implements
 
 	private CameraManager cameraManager;
 	private CaptureActivityHandler handler;
-	private Result savedResultToShow;
 	private ViewfinderView viewfinderView;
 	private TextView statusView;
 	private View resultView;
+	// private Result lastResult;
 	private boolean hasSurface;
 	private Collection<BarcodeFormat> decodeFormats;
 	private String characterSet;
@@ -82,9 +65,12 @@ public final class CaptureActivity extends Activity implements
 		pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		mWakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "My Tag");
 		setContentView(R.layout.capture);
+
 		hasSurface = false;
 		inactivityTimer = new InactivityTimer(this);
 		beepManager = new BeepManager(this);
+
+		// PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 	}
 
 	@Override
@@ -102,17 +88,21 @@ public final class CaptureActivity extends Activity implements
 		SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
 		SurfaceHolder surfaceHolder = surfaceView.getHolder();
 		if (hasSurface) {
+			// The activity was paused but not stopped, so the surface still
+			// exists. Therefore
+			// surfaceCreated() won't be called, so init the camera here.
 			initCamera(surfaceHolder);
 		} else {
+			// Install the callback and wait for surfaceCreated() to init the
+			// camera.
 			surfaceHolder.addCallback(this);
 			surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		}
-
 		beepManager.updatePrefs();
 		inactivityTimer.onResume();
+		// Intent intent = getIntent();
 		decodeFormats = null;
 		characterSet = "utf-8";
-
 	}
 
 	@Override
@@ -141,8 +131,11 @@ public final class CaptureActivity extends Activity implements
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			// if (source == IntentSource.NATIVE_APP_INTENT) {
+			setResult(RESULT_CANCELED);
 			finish();
 			return true;
+			// }
 		} else if (keyCode == KeyEvent.KEYCODE_FOCUS
 				|| keyCode == KeyEvent.KEYCODE_CAMERA) {
 			// Handle these events so they don't launch the Camera app
@@ -151,20 +144,8 @@ public final class CaptureActivity extends Activity implements
 		return super.onKeyDown(keyCode, event);
 	}
 
-	private void decodeOrStoreSavedBitmap(Bitmap bitmap, Result result) {
-		if (handler == null) {
-			savedResultToShow = result;
-		} else {
-			if (result != null) {
-				savedResultToShow = result;
-			}
-			if (savedResultToShow != null) {
-				Message message = Message.obtain(handler,
-						R.id.decode_succeeded, savedResultToShow);
-				handler.sendMessage(message);
-			}
-			savedResultToShow = null;
-		}
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 	}
 
 	@Override
@@ -218,6 +199,11 @@ public final class CaptureActivity extends Activity implements
 			if (points.length == 2) {
 				paint.setStrokeWidth(4.0f);
 				drawLine(canvas, paint, points[0], points[1]);
+			} else if (points.length == 4
+					&& (rawResult.getBarcodeFormat() == BarcodeFormat.UPC_A || rawResult
+							.getBarcodeFormat() == BarcodeFormat.EAN_13)) {
+				drawLine(canvas, paint, points[0], points[1]);
+				drawLine(canvas, paint, points[2], points[3]);
 			} else {
 				paint.setStrokeWidth(10.0f);
 				for (ResultPoint point : points) {
@@ -252,11 +238,6 @@ public final class CaptureActivity extends Activity implements
 		contentsTextView.setText(displayContents);
 		int scaledSize = Math.max(22, 32 - displayContents.length() / 4);
 		contentsTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, scaledSize);
-
-		// TextView supplementTextView = (TextView)
-		// findViewById(R.id.contents_supplement_text_view);
-		// supplementTextView.setText("");
-		// supplementTextView.setOnClickListener(null);
 	}
 
 	private void initCamera(SurfaceHolder surfaceHolder) {
@@ -266,12 +247,10 @@ public final class CaptureActivity extends Activity implements
 				handler = new CaptureActivityHandler(this, decodeFormats,
 						characterSet, cameraManager);
 			}
-			decodeOrStoreSavedBitmap(null, null);
+			// decodeOrStoreSavedBitmap(null, null);
 		} catch (IOException ioe) {
-			ioe.printStackTrace();
 			displayFrameworkBugMessageAndExit();
 		} catch (RuntimeException e) {
-			e.printStackTrace();
 			displayFrameworkBugMessageAndExit();
 		}
 	}
@@ -296,18 +275,10 @@ public final class CaptureActivity extends Activity implements
 		viewfinderView.drawViewfinder();
 	}
 
-	/**
-	 * @param v
-	 *            v是分享按钮
-	 */
 	public void shareByTb(View v) {
 
 	}
 
-	/**
-	 * @param v
-	 *            v是发送按钮
-	 */
 	public void sendToServer(View v) {
 
 	}
